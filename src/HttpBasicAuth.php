@@ -49,7 +49,7 @@ class HttpBasicAuth extends \Slim\Middleware
         $req = $this->app->request;
         $user = $req->headers('PHP_AUTH_USER');
         $pass = $req->headers('PHP_AUTH_PW');
-        $path = $req->getPath();
+        $path = $this->options['path'];
 
 
         if (!$this->checkPath($path, $req))
