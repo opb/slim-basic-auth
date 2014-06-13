@@ -30,13 +30,8 @@ class MyAuthClass implements \Slim\Middleware\AuthCheckerInterface
 {
 	// only function required by the interface
 	public function checkCredentials($username, $password)	{
-		return $this->myAuthFunction($username, $password);	
-	}
-	
-	// interact with your own auth system
-	protected function myAuthFunction($username, $password)
-	{
-		// do some stuff and return true if authorised, false if not
+		// interact with your own auth system
+		// do some stuff and return true if authorised, false if not	
 	}
 }
 
