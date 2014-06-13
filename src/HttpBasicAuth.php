@@ -88,7 +88,7 @@ class HttpBasicAuth extends \Slim\Middleware
      */
     private function checkPath($path, $req)
     {
-        $pattern = "/^{$path}/";
+        $pattern = "@^{$path}@";
         return !!preg_match($pattern, $req->getPath());
     }
 
