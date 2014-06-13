@@ -52,7 +52,7 @@ class HttpBasicAuth extends \Slim\Middleware
         $path = $req->getPath();
 
 
-        if (!$this->checkPath($path))
+        if (!$this->checkPath($path, $req))
         {
             $this->next->call();
         }
@@ -80,12 +80,13 @@ class HttpBasicAuth extends \Slim\Middleware
     }
 
     /**
-     * Matches current path agains configured private area
+     * Matches current path against configured private area
      *
      * @param $path The configured private path
+     * @param $req the Slim request object
      * @return bool
      */
-    private function checkPath($path)
+    private function checkPath($path, $req)
     {
         $pattern = "/^{$path}/";
         return !!preg_match($pattern, $req->getPath());
