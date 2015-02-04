@@ -23,9 +23,9 @@ class HttpBasicAuth extends \Slim\Middleware
 
     /**
      * @param AuthCheckerInterface $checker
-     * @param null $options
+     * @param array $options
      */
-    public function __construct(AuthCheckerInterface $checker, $options = null)
+    public function __construct(AuthCheckerInterface $checker, array $options = array())
     {
 
         $this->checker = $checker;
@@ -35,10 +35,7 @@ class HttpBasicAuth extends \Slim\Middleware
             'realm' => 'Protected Area'
         );
 
-        if ($options)
-        {
-            $this->options = array_merge($this->options, (array)$options);
-        }
+        $this->options = array_merge($this->options, $options);
     }
 
     /**
@@ -49,24 +46,21 @@ class HttpBasicAuth extends \Slim\Middleware
         $req = $this->app->request;
         $user = $req->headers('PHP_AUTH_USER');
         $pass = $req->headers('PHP_AUTH_PW');
-        $path = $this->options['path'];
 
-
-        if (!$this->checkPath($path, $req))
+        if (!$this->checkPath($this->options['path'], $req))
         {
             $this->next->call();
         }
         else
         {
-            if ($this->userAuthorised($user, $pass))
-            {
-                $this->next->call();
-            }
-            else
+            if (!$this->userAuthorised($user, $pass))
             {
                 $this->denyAccess();
+                
                 return;
             }
+
+            $this->next->call();
         }
     }
 
@@ -99,7 +93,7 @@ class HttpBasicAuth extends \Slim\Middleware
      */
     private function userAuthorised($username, $password)
     {
-        return $this->checker->checkCredentials($username, $password);
+        return !!$this->checker->checkCredentials($username, $password);
     }
 
 }
